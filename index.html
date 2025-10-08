@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="am">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SaLu</title>
+    <link rel="stylesheet" href="styles3.css">
+</head>
+
+<body>
+    <div class="container">
+        <img src="img.png" alt="SaLu"><br>
+        <div class="course-details">
+            <label class="label-head">Ընդունելության կարգը</label>
+            <p>Մեր ուսումնական կենտրոն ընդունվելու համար անհրաժեշտ է նախապես գրանցվել և մասնակցել ընդունելության
+                հարցազրույցին։</p>
+
+            <p>Գրանցվելու համար խնդրում ենք անցնել ստորև նշված հղումով։ Օգոստոսի 10-ից հետո մեր թիմը կապ կհաստատի Ձեզ
+                հետ՝ Ձեր նշված հեռախոսահամարներով և կնշանակի ընդունելության հարցազրույցի համար հանդիպում՝ լեզվական
+                մակարդակի գնահատման և ընդունելության նպատակով։</p>
+        </div>
+
+        <div class="course-details">
+            <label class="label-head">Մեր մասին</label>
+            <p>Մենք առաջարկում ենք ծրագրեր, որոնք ապահովում են լեզվի խորքային և համակարգված ուսումնասիրում՝ հիմնված
+                ժամանակակից մեթոդների, երկարատև փորձի և մշտապես թարմացվող նյութերի վրա։</p>
+
+            <p>Մեր բոլոր դասընթացները ընդգրկում են լեզվի կառուցվածքային հիմքերի ձևավորում՝ պրակտիկ քերականություն, արդի
+                բառապաշար, վարժ և գրագետ խոսք՝ միաժամանակ զարգացնելով մտքի ճկունություն, հստակ արտահայտվելու և
+                վերլուծական մտածողության կարողություններ։</p>
+            <p>📩 Հավելյալ տեղեկություններ ստանալու համար խնդրում ենք կապ հաստատել անձնական հաղորդագրությամբ՝ <a href="viber://chat?number=%2B37477406490">Viber</a></p>
+
+        </div><br>
+        <label class="label-head">Դասընթացի գրանցում</label>
+        <form id="registrationForm">
+            <div class="form-group">
+                <label for="firstName">Անուն:</label>
+                <input type="text" id="firstName" name="firstName" required>
+            </div>
+            <div class="form-group">
+                <label for="lastName">Ազգանուն:</label>
+                <input type="text" id="lastName" name="lastName" required>
+            </div>
+            <div class="form-group">
+                <label for="birthDate">Ծննդյան օր:</label>
+                <input type="date" id="birthDate" name="birthDate" required>
+            </div>
+            <div class="form-group">
+                <label for="class">Դասարան:</label>
+                <input type="text" id="class" name="class" placeholder="(ոչ պարտադիր)">
+            </div>
+            <div class="form-group">
+                <label for="phoneNumber">Հեռախոսահամար:</label>
+                <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="+374XXXXXXXX" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" placeholder="(ոչ պարտադիր)">
+            </div>
+            <div class="form-group">
+                <label class="custom-checkbox">
+                    <input type="checkbox" id="hasParentInfo" name="hasParentInfo">
+                    <span class="checkmark"></span>
+                    Ծնողի տվյալներ
+                </label>
+            </div>
+            <div id="parentInfo" style="display: none;">
+                <div class="form-group">
+                    <label for="parentFirstName">Ծնողի անուն:</label>
+                    <input type="text" id="parentFirstName" name="parentFirstName">
+                </div>
+                <div class="form-group">
+                    <label for="parentLastName">Ծնողի ազգանուն:</label>
+                    <input type="text" id="parentLastName" name="parentLastName">
+                </div>
+                <div class="form-group">
+                    <label for="parentPhoneNumber">Ծնողի հեռախոսահամար:</label>
+                    <input type="tel" id="parentPhoneNumber" name="parentPhoneNumber" placeholder="+374XXXXXXXX">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="courseType">Դասընթացի նպատակը՝</label>
+                <select id="courseType" name="courseType" required>
+                    <option value="">-- Ընտրել դասընթացը --</option>
+                    <option value="GeneralEnglish">Ընդհանուր անգլերեն (6-9-րդ դասարան)</option>
+                    <option value="PreUniversity">Խորացված անգլերեն և նախաբուհական ծրագիր (10-11-րդ դասարան)</option>
+                    <option value="University">Բուհական քննությունների պատրաստում</option>
+                    <option value="Adults">Խոսակցական անգլերեն</option>
+                    <option value="Small">Անգլերեն փոքրահասակ երեխաների համար</option>
+                </select>
+            </div>
+
+            <!-- Покажем описание здесь -->
+            <div id="courseDetails" class="course-details" style="display: none;"></div>
+
+
+            <div class="form-group">
+                <label for="OtherNotes">Այլ նշումներ:</label><br>
+                <textarea id="OtherNotes" name="OtherNotes" cols="40" rows="5" maxlength="600"
+                    placeholder="(ոչ պարտադիր)"></textarea><br><br>
+            </div>
+            <button type="submit">Հերթագրվել</button>
+        </form>
+    </div>
+
+    <!-- Модальное окно -->
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <label class="label-head">Դուք հաջողությամբ գրանցվել եք։</label>
+            <p>Հարգելի ապագա ուսանող,
+                Շնորհակալություն որակյալ կրթության հանդեպ Ձեր հետաքրքրության համար։</p>
+        </div>
+    </div>
+
+    <script src="script32.js"></script>
+</body>
+
+</html>
