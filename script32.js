@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const birthDateInput = document.getElementById('birthDate');
     const hasParentInfoCheckbox = document.getElementById('hasParentInfo');
     const parentInfoSection = document.getElementById('parentInfo');
@@ -7,14 +7,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const parentLastName = document.getElementById('parentLastName');
     const parentPhoneNumber = document.getElementById('parentPhoneNumber');
 
-    hasParentInfoCheckbox.addEventListener('change', function() {
+    hasParentInfoCheckbox.addEventListener('change', function () {
         parentInfoSection.style.display = this.checked ? 'block' : 'none';
         parentLastName.required = this.checked;
         parentFirstName.required = this.checked;
         parentPhoneNumber.required = this.checked;
     });
 
-    birthDateInput.addEventListener('change', function() {
+    birthDateInput.addEventListener('change', function () {
         const birthDate = new Date(this.value);
         const today = new Date();
         let age = today.getFullYear() - birthDate.getFullYear();
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    document.getElementById('registrationForm').addEventListener('submit', function(event) {
+    document.getElementById('registrationForm').addEventListener('submit', function (event) {
         event.preventDefault();
 
         const formData = {
@@ -75,15 +75,15 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             body: JSON.stringify(formData)
         })
-        .then(response => response.json())
-        .then(data => {
-            // Показать модальное окно при успешной регистрации
-            showModal();
-        })
-        .catch(error => {
-            console.error('Ошибка:', error);
-            alert('Произошла ошибка при регистрации.');
-        });
+            .then(response => response.json())
+            .then(data => {
+                // Показать модальное окно при успешной регистрации
+                showModal();
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Произошла ошибка при регистрации.');
+            });
     });
 
     // Функции для показа и скрытия модального окна
@@ -109,11 +109,11 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('courseDetails').style.display = "none";
     }
 
-    span.onclick = function() {
+    span.onclick = function () {
         modal.style.display = 'none';
     }
 
-    window.onclick = function(event) {
+    window.onclick = function (event) {
         if (event.target === modal) {
             modal.style.display = 'none';
         }
@@ -127,15 +127,15 @@ const courseDescriptions = {
         price: "25 000 ֏/ամիս",
         description: "Շաբաթական 2 դաս, 2 ժամ տևողությամբ։"
     },
-    PreUniversity: {
-        title: "Խորացված անգլերեն և նախաբուհական ծրագիր (10-11-րդ դասարան)",
+    PreUniversity2: {
+        title: "Նախաբուհական ծրագիր 11-րդ դասարան (2 դաս)",
         price: "30 000 ֏/ամիս֏",
         description: "Նպատակաուղղված խորացված ծրագիր՝ համապատասխան ակադեմիական պահանջներին։</p><p>Շաբաթական 2 դաս, 2 ժամ տևողությամբ։"
     },
-    University: {
-        title: "Բուհական քննությունների պատրաստում",
+    PreUniversity3: {
+        title: "Նախաբուհական ծրագիր 11-րդ դասարան (3 դաս)",
         price: "40 000 ֏/ամիս",
-        description: "Ինտենսիվ, խորացված ծրագիր՝ անհատականացված յուրաքանչյուր բուհի քննություններին առավելագույնս պատրաստվելու համար։</p><p>Շաբաթական 3 դաս, 2 ժամ տևողությամբ։"
+        description: "Նպատակաուղղված խորացված ծրագիր՝ համապատասխան ակադեմիական պահանջներին։</p><p>Շաբաթական 3 դաս, 2 ժամ տևողությամբ։"
     },
     Adults: {
         title: "Խոսակցական անգլերեն",
