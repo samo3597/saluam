@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function () {
+(function () {
     const birthDateInput = document.getElementById('birthDate');
     const hasParentInfoCheckbox = document.getElementById('hasParentInfo');
     const parentInfoSection = document.getElementById('parentInfo');
@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const parentFirstName = document.getElementById('parentFirstName');
     const parentLastName = document.getElementById('parentLastName');
     const parentPhoneNumber = document.getElementById('parentPhoneNumber');
+    const submitBtn = document.querySelector('button[type="submit"]');
 
     hasParentInfoCheckbox.addEventListener('change', function () {
         parentInfoSection.style.display = this.checked ? 'block' : 'none';
@@ -45,14 +46,32 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    function isValidArmenianPhone(phone) {
+        return /^\+374\d{8}$/.test(phone);
+    }
+
     document.getElementById('registrationForm').addEventListener('submit', function (event) {
         event.preventDefault();
+
+        const phoneValue = document.getElementById('phoneNumber').value;
+        if (!isValidArmenianPhone(phoneValue)) {
+            alert('Հեռախոսահամարը պետք է լինի +374XXXXXXXX ձևաչափով (օր.՝ +37477123456)');
+            return;
+        }
+
+        if (hasParentInfoCheckbox.checked) {
+            const parentPhone = document.getElementById('parentPhoneNumber').value;
+            if (!isValidArmenianPhone(parentPhone)) {
+                alert('Ծնողի հեռախոսահամարը պետք է լինի +374XXXXXXXX ձևաչափով');
+                return;
+            }
+        }
 
         const formData = {
             firstName: document.getElementById('firstName').value,
             lastName: document.getElementById('lastName').value,
             birthDate: document.getElementById('birthDate').value,
-            phoneNumber: document.getElementById('phoneNumber').value,
+            phoneNumber: phoneValue,
             email: document.getElementById('email').value,
             class: document.getElementById('class').value,
             OtherNotes: document.getElementById('OtherNotes').value,
@@ -68,45 +87,39 @@ document.addEventListener('DOMContentLoaded', function () {
             };
         }
 
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Ուղարկվում է...';
+
         fetch('https://salu.am/APIReg/hs/register/Reg', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(formData)
         })
-            .then(response => response.json())
-            .then(data => {
-                // Показать модальное окно при успешной регистрации
+            .then(response => {
+                if (!response.ok) throw new Error('HTTP ' + response.status);
+                return response.json();
+            })
+            .then(() => {
                 showModal();
             })
             .catch(error => {
-                console.error('Ошибка:', error);
-                alert('Произошла ошибка при регистрации.');
+                console.error(error);
+                alert('Տեղի ունեցավ սխալ գրանցման ժամանակ։ Խնդրում ենք կրկին փորձել։');
+            })
+            .finally(() => {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Հերթագրվել';
             });
     });
 
-    // Функции для показа и скрытия модального окна
     const modal = document.getElementById('successModal');
     const span = document.getElementsByClassName('close')[0];
 
     function showModal() {
         modal.style.display = 'block';
-        document.getElementById('firstName').value = "";
-        document.getElementById('lastName').value = "";
-        document.getElementById('birthDate').value = "";
-        document.getElementById('phoneNumber').value = "";
-        document.getElementById('email').value = "";
-        document.getElementById('OtherNotes').value = "";
-        document.getElementById('courseType').value = "";
-        document.getElementById('parentFirstName').value = "";
-        document.getElementById('parentLastName').value = "";
-        document.getElementById('parentPhoneNumber').value = "";
-        document.getElementById('hasParentInfo').checked = false;
-        document.getElementById('hasParentInfo').disabled = false;
+        document.getElementById('registrationForm').reset();
         document.getElementById('parentInfo').style.display = 'none';
-        document.getElementById('class').value = "";
-        document.getElementById('courseDetails').style.display = "none";
+        document.getElementById('courseDetails').style.display = 'none';
     }
 
     span.onclick = function () {
@@ -118,51 +131,44 @@ document.addEventListener('DOMContentLoaded', function () {
             modal.style.display = 'none';
         }
     }
-});
+})();
 
+fetch('courses.json')
+    .then(response => {
+        if (!response.ok) throw new Error('HTTP ' + response.status);
+        return response.json();
+    })
+    .then(courseDescriptions => {
+        document.getElementById('courseType').addEventListener('change', function () {
+            const selected = this.value;
+            const detailsBlock = document.getElementById('courseDetails');
 
-const courseDescriptions = {
-    GeneralEnglish: {
-        title: "Ընդհանուր անգլերեն (6-9-րդ դասարան)",
-        price: "25 000 ֏/ամիս",
-        description: "Շաբաթական 2 դաս, 2 ժամ տևողությամբ։"
-    },
-    PreUniversity2: {
-        title: "Նախաբուհական ծրագիր 11-րդ դասարան (2 դաս)",
-        price: "30 000 ֏/ամիս֏",
-        description: "Նպատակաուղղված խորացված ծրագիր՝ համապատասխան ակադեմիական պահանջներին։</p><p>Շաբաթական 2 դաս, 2 ժամ տևողությամբ։"
-    },
-    PreUniversity3: {
-        title: "Նախաբուհական ծրագիր 11-րդ դասարան (3 դաս)",
-        price: "40 000 ֏/ամիս",
-        description: "Նպատակաուղղված խորացված ծրագիր՝ համապատասխան ակադեմիական պահանջներին։</p><p>Շաբաթական 3 դաս, 2 ժամ տևողությամբ։"
-    },
-    Adults: {
-        title: "Խոսակցական անգլերեն",
-        price: "30 000 ֏/ամիս",
-        description: "Գործնական քերականություն, պրակտիկ բառապաշար, լսողական և խոսքային զարգացման ինտենսիվ դասընթաց։</p><p>Շաբաթական 2 դաս, 2 ժամ տևողությամբ։"
-    },
-    Small: {
-        title: "Անգլերեն փոքրահասակ երեխաների համար՝ կենտրոնի հավաստագրված մասնագետի մոտ",
-        price: "20 000 ֏/ամիս",
-        description: "Լեզվի յուրացման համակողմանի մոտեցում՝ փոքր տարիքային խմբերի համար։</p><p>Շաբաթական 2 դաս, 2 ժամ տևողությամբ։"
-    }
-};
+            if (courseDescriptions[selected]) {
+                const course = courseDescriptions[selected];
 
-document.getElementById('courseType').addEventListener('change', function () {
-    const selected = this.value;
-    const detailsBlock = document.getElementById('courseDetails');
+                const h4 = document.createElement('h4');
+                h4.textContent = course.title;
 
-    if (courseDescriptions[selected]) {
-        const course = courseDescriptions[selected];
-        detailsBlock.innerHTML = `
-            <h4>${course.title}</h4>
-            <div class="price">${course.price}</div>
-            <p>${course.description}</p>
-        `;
-        detailsBlock.style.display = "block";
-    } else {
-        detailsBlock.style.display = "none";
-    }
-});
+                const priceDiv = document.createElement('div');
+                priceDiv.className = 'price';
+                priceDiv.textContent = course.price;
 
+                detailsBlock.innerHTML = '';
+                detailsBlock.appendChild(h4);
+                detailsBlock.appendChild(priceDiv);
+
+                course.description.forEach(text => {
+                    const p = document.createElement('p');
+                    p.textContent = text;
+                    detailsBlock.appendChild(p);
+                });
+
+                detailsBlock.style.display = 'block';
+            } else {
+                detailsBlock.style.display = 'none';
+            }
+        });
+    })
+    .catch(error => {
+        console.error('Դասընթացների տվյալները չհաջողվեց բեռնել։', error);
+    });
