@@ -8,6 +8,69 @@
     const parentPhoneNumber = document.getElementById('parentPhoneNumber');
     const submitBtn = document.querySelector('button[type="submit"]');
 
+    document.addEventListener("DOMContentLoaded", () => {
+        // 1. Գտնում ենք HTML-ում ներդրված JSON-ով թեգը
+        const jsonContainer = document.getElementById('embedded-json-data');
+
+        if (!jsonContainer) {
+            console.error('Դասընթացների տվյալների թեգը չի գտնվել HTML-ում։');
+            return;
+        }
+
+        try {
+            // 2. Կարդում ենք տվյալները և դարձնում const (Object.freeze-ը պաշտպանում է փոփոխումից)
+            const courseDescriptions = Object.freeze(JSON.parse(jsonContainer.textContent));
+
+            const courseTypeSelect = document.getElementById('courseType');
+            const detailsBlock = document.getElementById('courseDetails');
+
+            // Ստուգում ենք HTML էլեմենտների գոյությունը, որպեսզի կոդը սխալ չտա
+            if (!courseTypeSelect || !detailsBlock) return;
+
+            // 3. Կցում ենք իրադարձությունը (Event Listener) select-ին
+            courseTypeSelect.addEventListener('change', function () {
+                const selected = this.value;
+
+                if (courseDescriptions[selected]) {
+                    const course = courseDescriptions[selected];
+
+                    // Օպտիմալացում. Ստեղծում ենք DocumentFragment, որպեսզի DOM-ը անընդհատ չվերանկարվի (Reflow)
+                    const fragment = document.createDocumentFragment();
+
+                    const h4 = document.createElement('h4');
+                    h4.textContent = course.title;
+                    fragment.appendChild(h4);
+
+                    const priceDiv = document.createElement('div');
+                    priceDiv.className = 'price';
+                    priceDiv.textContent = course.price;
+                    fragment.appendChild(priceDiv);
+
+                    // Ստուգում ենք՝ արդյոք նկարագրությունը զանգված է
+                    if (Array.isArray(course.description)) {
+                        course.description.forEach(text => {
+                            const p = document.createElement('p');
+                            p.textContent = text;
+                            fragment.appendChild(p);
+                        });
+                    }
+
+                    // Մաքրում ենք հին բովանդակությունը և մեկ անգամից ավելացնում նորը
+                    detailsBlock.innerHTML = '';
+                    detailsBlock.appendChild(fragment);
+
+                    detailsBlock.style.display = 'block';
+                } else {
+                    detailsBlock.innerHTML = '';
+                    detailsBlock.style.display = 'none';
+                }
+            });
+
+        } catch (error) {
+            console.error('Սխալ՝ HTML-ից JSON տվյալների ընթերցման ժամանակ։', error);
+        }
+    });
+
     hasParentInfoCheckbox.addEventListener('change', function () {
         parentInfoSection.style.display = this.checked ? 'block' : 'none';
         parentLastName.required = this.checked;
