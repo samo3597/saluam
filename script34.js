@@ -196,42 +196,4 @@
     }
 })();
 
-fetch('courses.json')
-    .then(response => {
-        if (!response.ok) throw new Error('HTTP ' + response.status);
-        return response.json();
-    })
-    .then(courseDescriptions => {
-        document.getElementById('courseType').addEventListener('change', function () {
-            const selected = this.value;
-            const detailsBlock = document.getElementById('courseDetails');
 
-            if (courseDescriptions[selected]) {
-                const course = courseDescriptions[selected];
-
-                const h4 = document.createElement('h4');
-                h4.textContent = course.title;
-
-                const priceDiv = document.createElement('div');
-                priceDiv.className = 'price';
-                priceDiv.textContent = course.price;
-
-                detailsBlock.innerHTML = '';
-                detailsBlock.appendChild(h4);
-                detailsBlock.appendChild(priceDiv);
-
-                course.description.forEach(text => {
-                    const p = document.createElement('p');
-                    p.textContent = text;
-                    detailsBlock.appendChild(p);
-                });
-
-                detailsBlock.style.display = 'block';
-            } else {
-                detailsBlock.style.display = 'none';
-            }
-        });
-    })
-    .catch(error => {
-        console.error('Դասընթացների տվյալները չհաջողվեց բեռնել։', error);
-    });
